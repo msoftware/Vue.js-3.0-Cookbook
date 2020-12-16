@@ -13,8 +13,9 @@
   </div>
   <script>
     const {
-      reactive,
-      watch,
+      reactive, // https://v3.vuejs.org/api/basic-reactivity.html#reactive
+      watch,    // https://v3.vuejs.org/api/computed-watch-api.html#watch
+	  watchEffect,
     } = Vue;
 
     const mod = (a, b) => ((a % b) + b) % b;
@@ -25,21 +26,25 @@
       speed: 1,
     });
 
-    watch(() => {
-      const street = Array(maxRoadLength).fill('_');
-      const marathonEl = document.getElementById('marathon');
-      street[competitor.position] = (competitor.position % 2 === 1)
-        ? '🏃'
-        : '🚶';
-
-      marathonEl.innerHTML = '';
-      marathonEl.innerHTML = street.reverse().join('');
-    });
-
+    watch(
+	    () => competitor.position,
+		(position, prevPosition) => {
+			const street = Array(maxRoadLength).fill('_');
+			const marathonEl = document.getElementById('marathon');
+			street[competitor.position] = (competitor.position % 2 === 1)
+			? '🏃'
+			: '🚶';
+			// marathonEl.innerHTML = '';
+			marathonEl.innerHTML = street.reverse().join('') + "<br>" + position + " " + prevPosition;
+		});
 
     setInterval(() => {
       competitor.position = mod(competitor.position + competitor.speed, maxRoadLength)
     }, 100);
+	
+	setInterval(() => {
+      competitor.speed = mod(competitor.speed + 1, 2)
+    }, 1000);
   </script>
 </body>
 

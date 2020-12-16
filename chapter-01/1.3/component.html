@@ -8,11 +8,14 @@
   <div id="app">
   </div>
   <script>
+    
+	// functions from the Vue global constant
     const {
-      defineComponent,
-      createApp,
+      defineComponent,  // https://v3.vuejs.org/api/global-api.html#definecomponent
+      createApp,		// https://v3.vuejs.org/api/global-api.html#createapp
     } = Vue;
 
+    // New constant method nameInput
     const nameInput = defineComponent({
       name: 'NameInput',
       props: {
@@ -27,23 +30,30 @@
           }"
           :value="modelValue"
           type="text"
-          @change="(event) => $emit('update:modelValue', event.target.value)"
+          @change="(event) => { $emit('update:modelValue', event.target.value) }"
         />
-      </label>
+      {{modelValue}}</label>
       `
     });
 
-
     const appComponent = defineComponent({
       data: () => ({
-        name: '',
+        name1: '',
+		name2: '',
       }),
       template: `
       <name-input
-        v-model="name"
+        v-model="name1"
         style="border:0; border-bottom: 2px solid red;"
-        data-test="name-input"
-      />`
+        data-test="name-input1"
+      /><br>
+	  <name-input
+        v-model="name2"
+        style="border:0; border-bottom: 2px solid red;"
+        data-test="name-input2"
+      /><br>
+	  {{name1}}<br>
+	  {{name2}}`
     });
 
     const app = createApp(appComponent);

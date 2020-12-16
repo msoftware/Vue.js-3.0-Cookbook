@@ -11,10 +11,10 @@
 const {
   createApp,
   defineComponent,
-  setup,
-  ref,
-  onMounted,
-  onUnmounted,
+  setup,    // https://v3.vuejs.org/api/composition-api.html#setup
+  ref,      // https://v3.vuejs.org/api/refs-api.html#ref
+  onMounted,  // https://v3.vuejs.org/api/composition-api.html#lifecycle-hooks
+  onUnmounted,  // https://v3.vuejs.org/api/composition-api.html#lifecycle-hooks
 } = Vue;
 
 function fetchLocation() {
@@ -32,15 +32,21 @@ function fetchLocation() {
   });
 
   function setPosition(payload) {
+    console.log("setPosition");
+	console.dir(payload)
     gpsTime.value = payload.timestamp
     coordinates.value = payload.coords
   }
 
   onMounted(() => {
+    // https://developer.mozilla.org/en-US/docs/Web/API/Geolocation/watchPosition
+	// navigator.geolocation.watchPosition(success[, error[, options]])
     if (geoLocation) positionWatcher = geoLocation.watchPosition(setPosition);
   });
 
   onUnmounted(() => {
+    // https://developer.mozilla.org/en-US/docs/Web/API/Geolocation/clearWatch
+	// navigator.geolocation.clearWatch(id);
     if (positionWatcher) geoLocation.clearWatch(positionWatcher);
   });
 
@@ -62,6 +68,7 @@ const appComponent = defineComponent({
       day: 'numeric',
       hour: 'numeric',
       minute: 'numeric',
+	  second: 'numeric',
       hour12: true,
     };
 
@@ -82,6 +89,22 @@ const appComponent = defineComponent({
     </ul>
   `
 });
+
+function getXY() {
+  let x = 10;
+  let y = 29;
+  let a = 33;
+  let b = 55;
+  return { x, y, a, b};
+}
+
+// return multiple values as object and use them as values in the current scope
+const {x, y} = getXY();
+console.log(x + " " + y);
+
+const {a, b} = getXY();
+console.log(a + " " + b);
+
 
 createApp(appComponent)
   .mount('#app');
