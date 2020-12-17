@@ -1,6 +1,7 @@
 import {Animal, FoodChainType} from './Animal';
 
-class Dog extends Animal {
+// Needs export to be available in test.ts
+export class Dog extends Animal {
   constructor() {
     super({
       name: 'Dog',
